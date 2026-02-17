@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>| Ecommerce Website Design</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Icons are inline SVGs now (no external icon font) -->
+    </head>
+    <body>
+    <div id="Home" class="container">
+        <div class="navbar">
+            <div class="logo">
+                <img src="images/logo1.jpg.jfif" width="125px">
+            </div>
+            <div class="search-wrap" aria-hidden="false">
+                <form id="searchForm" role="search" aria-label="Search products">
+                    <input id="searchInput" type="search" placeholder="Search products..." aria-label="Search products">
+                    <button type="submit" class="search-btn" aria-label="Search">
+                        <!-- magnifier SVG -->
+                        <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#555" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 21.49 21.49 20l-5.99-6zM10 15a5 5 0 110-10 5 5 0 010 10z"/></svg>
+                    </button>
+                    <button type="button" id="searchClear" class="search-clear" aria-label="Clear search" hidden>
+                        <!-- simple X -->
+                        <svg width="12" height="12" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#999" d="M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.41 4.29 19.71 2.88 18.3 9.18 12 2.88 5.71 4.29 4.29 10.59 10.59 16.88 4.29z"/></svg>
+                    </button>
+                </form>
+                <span id="searchInfo" class="search-info" hidden aria-live="polite"></span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#Home">Home</a></li>
+                    <li><a href="#Products">Products</a></li>
+                    <li><a href="aboutus.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="orders.html">My Orders</a></li>
+                    <li><a href="account.html">Register</a></li>
+                                        <li><a href="cart.html" aria-label="Cart">
+                                            <!-- inline cart SVG -->
+                                            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                <path fill="#555" d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.44C8.89 16.37 9.5 17 10.25 17H19v-2H10.25l.9-1.63L19 6H7V4z"/>
+                                                <circle cx="10" cy="20" r="1" fill="#555"/>
+                                                <circle cx="18" cy="20" r="1" fill="#555"/>
+                                            </svg>
+                                        </a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <h1>Click, Sip, Repeat.</h1>
+                <p>Brewed with love, shared with joy.</p>
+                <a href="#Products" class="btn">Shop Now &#8594;</a>
+            </div>
+            <div class="col-2">
+                <img src="images/background.jpg.jfif" alt="Coffee Background">
+            </div>
+        </div>
+    </div>
+
+<!-- Featured Categories -->
+<div class="categories">
+    <div class="small-container">
+        <div class="row">
+            <div class="col-3">
+                <img src="images/pic1.jpg.jfif" alt="Category 1">
+            </div>
+            <div class="col-3">
+                <img src="images/pic2.jpg.jfif" alt="Category 2">
+            </div>
+            <div class="col-3">
+                <img src="images/pic3.jpg.jfif" alt="Category 3">
+            </div>
+</div>
+</div>
+
+</div>
+<!-- Featured Products -->
+<section class="featured-products" id="Products">
+    <div class="small-container">
+        <h2 class="title">Classic | Espresso - Based</h2>
+        <div class="row">
+            <div class="col-4">
+                <img src="images/product1.jpg.jfif" alt="Product 1">
+                <h4>Black Americano</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande ₱79.00</p>
+                <p>Venti - ₱89.00</p>
+            </div>
+
+            <div class="col-4">
+                <img src="images/product2.jpg.jfif" alt="Product 2">
+                <h4>Cafe Latte</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱89.00</p>
+                <p>Venti - ₱99.00</p>
+            </div>
+
+            <div class="col-4">
+                <img src="images/product3.jpg.jfif" alt="Product 3">
+                <h4>Hazel Nut Latte</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱94.00</p>
+                <p>Venti - ₱104.00</p>
+            </div>
+            <div class="col-4">
+                <img src="images/product4,jpg.jfif" alt="Product 4">
+                <h4>Vanilla Latte</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱94.00</p>
+                <p>Venti - ₱104.00</p>
+                </div>
+                <div class="col-4">
+                <img src="images/product5.jpg.jfif" alt="Product 5">
+                <h4>Mocha</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱94.00</p>
+                <p>Venti - ₱104.00</p>
+                </div>
+                <div class="col-4">
+                <img src="images/product6.jpg.jfif" alt="Product 6">
+                <h4>White Chocolate Latte</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱94.00</p>
+                <p>Venti - ₱104.00</p>
+                </div>
+                <div class="col-4">
+                <img src="images/product7.jpg.jfif" alt="Product 7">
+                <h4>Caramel Latte Latte</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱94.00</p>
+                <p>Venti - ₱104.00</p>
+                </div>
+                <div class="col-4">
+                <img src="images/product8.jpg.jfif" alt="Product 8">
+                <h4>Salted Caramel Latte</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱94.00</p>
+                <p>Venti - ₱104.00</p>
+                </div>
+                <div class="col-4">
+                <img src="images/product9.jpg.jfif" alt="Product 9">
+                <h4>Caramel Macchiato</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱94.00</p>
+                <p>Venti - ₱104.00</p>
+                </div>
+                <div class="col-4">
+                <img src="images/product10.jpg.jfif" alt="Product 10">
+                <h4>Spanish Latte</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱99.00</p>
+                <p>Venti - ₱109.00</p>
+                </div>
+                <div class="col-4">
+                <img src="images/product11.jpg.jfif" alt="Product 11 ">
+                <h4>Cinnamon Latte</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱99.00</p>
+                <p>Venti - ₱109.00</p>
+                </div>
+                <section class="featured-products">
+    <div class="small-container">
+        <h2 class="title">Non Coffee</h2>
+        <div class="row">
+            <div class="col-4">
+                <img src="images/product12.jpg.jfif" alt="Product 12">
+                <h4>Matcha</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱94.00</p>
+                <p>Venti - ₱104.00</p>
+            </div>
+
+            <div class="col-4">
+                <img src="images/product13.jpg.jfif" alt="Product 13">
+                <h4>Matcha Berry</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱94.00</p>
+                <p>Venti - ₱104.00</p>
+            </div>
+
+            <div class="col-4">
+                <img src="images/product14.jpg.jfif" alt="Product 14">
+                <h4>Strawberry Milk</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱94.00</p>
+                <p>Venti - ₱104.00</p>
+            </div>
+
+            <div class="col-4">
+                <img src="images/product15.jpg.jfif" alt="Product 15">
+                <h4>Chocolate</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                </div>
+                <p>Grande - ₱94.00</p>
+                <p>Venti - ₱104.00</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navbar avatar swap: replace Register link with small profile image if user is signed in -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            try {
+                const cu = localStorage.getItem('current_user');
+                if (!cu) return;
+                const user = JSON.parse(cu);
+                const a = document.querySelector('nav a[href="account.html"]');
+                if (!a) return;
+                const li = a.closest('li');
+                if (!li) return;
+
+                                // replace rating icons (Font Awesome classes) with inline SVGs so we don't depend on CDN
+                                try {
+                                    const starSvg = '<svg class="icon-star" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+                                        + '<path fill="#8d4409" d="M12 .587l3.668 7.431L24 9.748l-6 5.847L19.417 24 12 18.896 4.583 24 6 15.595 0 9.748l8.332-1.73z"/>'
+                                        + '</svg>';
+                                    document.querySelectorAll('i.fa.fa-star').forEach(function (el) { el.outerHTML = starSvg; });
+                                    document.querySelectorAll('i.fa.fa-star-half-alt').forEach(function (el) { el.outerHTML = starSvg; });
+                                } catch (e) { /* ignore */ }
+
+                                // a tiny black person silhouette SVG (inline)
+                const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="28" r="18" fill="%23000"/><path d="M16 86c0-22 18-36 34-36s34 14 34 36" fill="%23000"/></svg>';
+                const img = document.createElement('img');
+                img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+                img.alt = (user.fullname || user.email || 'Profile');
+                img.className = 'nav-avatar';
+
+                const link = document.createElement('a');
+                link.href = 'account-dashboard.html';
+                link.title = user.fullname || user.email || 'Account';
+                link.appendChild(img);
+
+                li.innerHTML = '';
+                li.appendChild(link);
+            } catch (e) {
+                /* ignore errors */
+            }
+        });
+    </script>
+
+        <script>
+        // Add-to-cart wiring: dynamically add buttons and update localStorage cart
+        (function () {
+            const CART_KEY = 'ecommerce_cart';
+
+            function readCart() { try { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); } catch (e) { return []; } }
+            function writeCart(items) { try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch (e) {} }
+
+              // Parse prices for sizes from product tile. Returns { Grande: number, Venti: number }
+              function parsePricesFromEl(el) {
+                        const ps = Array.from(el.querySelectorAll('p'));
+                        const out = { Grande: 0, Venti: 0 };
+                        ps.forEach(p => {
+                            const txt = p.textContent || '';
+                            const numMatch = txt.match(/\d+[.,]?\d*/);
+                            const num = numMatch ? Number(numMatch[0].replace(/,/g, '')) : 0;
+                            if (/Grande/i.test(txt)) out.Grande = num;
+                            else if (/Venti/i.test(txt)) out.Venti = num;
+                            else if (!out.Grande) out.Grande = out.Grande || num;
+                        });
+                        // fallback: if only one price exists, copy to both sizes
+                        if (!out.Venti) out.Venti = out.Grande;
+                        return out;
+                    }
+
+            function updateCartBadge() {
+                const items = readCart();
+                const count = items.reduce((s,i) => s + (i.qty||1), 0);
+                const a = document.querySelector('nav a[href="cart.html"]');
+                if (!a) return;
+                let badge = a.querySelector('.cart-badge');
+                if (!badge) {
+                    badge = document.createElement('span'); badge.className = 'cart-badge';
+                    a.appendChild(badge);
+                }
+                badge.textContent = count;
+                badge.style.display = count ? 'inline-block' : 'none';
+            }
+
+            // Flying thumbnail animation: copy the product image and animate to cart icon
+            function animateFly(imgEl) {
+                try {
+                    const targetAnchor = document.querySelector('nav a[href="cart.html"]');
+                    if (!imgEl || !targetAnchor) return;
+                    const start = imgEl.getBoundingClientRect();
+                    const targetRect = targetAnchor.getBoundingClientRect();
+                    const fly = document.createElement('img');
+                    fly.src = imgEl.src || imgEl.getAttribute('data-src') || '';
+                    fly.className = 'fly-img';
+                    // initial placement
+                    fly.style.left = start.left + 'px';
+                    fly.style.top = start.top + 'px';
+                    fly.style.width = start.width + 'px';
+                    fly.style.height = start.height + 'px';
+                    fly.style.opacity = '1';
+                    document.body.appendChild(fly);
+                    // compute translation to center of target
+                    const dx = (targetRect.left + targetRect.width/2) - (start.left + start.width/2);
+                    const dy = (targetRect.top + targetRect.height/2) - (start.top + start.height/2);
+                    // allow the browser to register initial style
+                    requestAnimationFrame(function () {
+                        fly.style.transition = 'transform 700ms cubic-bezier(.22,.8,.36,1), opacity 700ms ease';
+                        const scale = 0.22;
+                        fly.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + scale + ')';
+                        fly.style.opacity = '0.6';
+                    });
+                    fly.addEventListener('transitionend', function () { try { fly.remove(); } catch (e) {} });
+                } catch (e) { /* ignore animation errors */ }
+            }
+
+            function addToCart(item) {
+                const items = readCart();
+                const existing = items.find(i => i.title === item.title && i.price === item.price);
+                if (existing) existing.qty = (existing.qty || 1) + 1;
+                else items.push(Object.assign({ qty: 1 }, item));
+                writeCart(items);
+                updateCartBadge();
+            }
+
+            // Insert buttons for all product tiles (.col-4)
+            document.querySelectorAll('.col-4').forEach(function (tile) {
+                try {
+                    if (tile.querySelector('.add-to-cart')) return; // already added
+                    const titleEl = tile.querySelector('h4');
+                    if (!titleEl) return;
+                    const title = titleEl.textContent.trim();
+                    const img = tile.querySelector('img');
+                    const imgSrc = img ? (img.getAttribute('src') || '') : '';
+                    const prices = parsePricesFromEl(tile);
+                    const price = prices.Grande || 0;
+                    // create size selector
+                    const sizeSelect = document.createElement('select');
+                    sizeSelect.className = 'size-select';
+                    const optG = document.createElement('option'); optG.value = prices.Grande; optG.textContent = 'Grande — ₱' + (prices.Grande ? prices.Grande.toFixed(2) : '0.00');
+                    const optV = document.createElement('option'); optV.value = prices.Venti; optV.textContent = 'Venti — ₱' + (prices.Venti ? prices.Venti.toFixed(2) : '0.00');
+                    sizeSelect.appendChild(optG); sizeSelect.appendChild(optV);
+                    tile.appendChild(sizeSelect);
+                    const btn = document.createElement('button');
+                    btn.className = 'add-to-cart';
+                    btn.type = 'button';
+                    btn.textContent = 'Add to cart';
+                    btn.addEventListener('click', function () {
+                        // determine selected size and price
+                        const selPrice = Number(sizeSelect.value) || price;
+                        const selSize = sizeSelect.options[sizeSelect.selectedIndex].text.split('\u2014')[0].trim();
+                        // animate a flying thumbnail from product image to cart
+                        if (img) animateFly(img);
+                        addToCart({ title: title, price: selPrice, image: imgSrc, size: selSize, prices: prices });
+                        btn.textContent = 'Added ✓';
+                        setTimeout(function () { btn.textContent = 'Add to cart'; }, 900);
+                    });
+                    // append button to tile (after price paragraph)
+                    tile.appendChild(btn);
+                } catch (e) { /* ignore */ }
+            });
+
+            // initialize badge
+            updateCartBadge();
+        })();
+        </script>
+
+        <script>
+        // Product search: client-side filtering of .col-4 product tiles
+        (function () {
+            function qs(sel, ctx) { return (ctx || document).querySelector(sel); }
+            function qsa(sel, ctx) { return Array.from((ctx || document).querySelectorAll(sel)); }
+
+            const input = qs('#searchInput');
+            const form = qs('#searchForm');
+            const clearBtn = qs('#searchClear');
+            const info = qs('#searchInfo');
+
+            // collect product tiles (any .col-4 that has an h4 title)
+            const products = qsa('.featured-products .col-4').map(function (el) {
+                const titleEl = el.querySelector('h4');
+                const name = titleEl ? titleEl.textContent.trim() : '';
+                return { el: el, name: name.toLowerCase() };
+            });
+
+            function showAll() { products.forEach(p => p.el.style.display = 'block'); info.hidden = true; clearBtn.hidden = true; }
+
+            function filter(q) {
+                const ql = q.trim().toLowerCase();
+                if (!ql) { showAll(); return; }
+                let count = 0;
+                products.forEach(p => {
+                    if (p.name.indexOf(ql) !== -1) { p.el.style.display = ''; count++; }
+                    else { p.el.style.display = 'none'; }
+                });
+                info.hidden = false; info.textContent = count + ' result' + (count === 1 ? '' : 's');
+                clearBtn.hidden = false;
+                // scroll to first match if any
+                if (count > 0) {
+                    const first = products.find(p => p.name.indexOf(ql) !== -1);
+                    try { first.el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+                }
+            }
+
+            if (form && input) {
+                form.addEventListener('submit', function (e) { e.preventDefault(); filter(input.value); });
+                input.addEventListener('input', function () { filter(input.value); });
+                clearBtn.addEventListener('click', function () { input.value = ''; showAll(); input.focus(); });
+            }
+        })();
+        </script>
+
+</body>
+
+
+
+
+
+
+
+
+
+</html>
