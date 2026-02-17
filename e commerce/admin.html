@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Panel — 2 Shot Espresso</title>
+  <link rel="stylesheet" href="admin.css">
+  <meta name="description" content="Admin dashboard for local e-commerce demo">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="brand">2 Shot — Admin</div>
+      <nav>
+        <a href="#" data-view="dashboard" class="active">Dashboard</a>
+        <a href="#" data-view="customers">Customers</a>
+        <a href="#" data-view="orders">Orders</a>
+      </nav>
+      <div class="sidebar-footer">Local admin • client-only</div>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <h1 id="viewTitle">Dashboard</h1>
+      </header>
+
+      <section id="dashboard" class="view">
+        <div class="cards">
+          <div class="card">
+            <div class="label">Orders</div>
+            <div id="statOrders" class="value">0</div>
+          </div>
+          <div class="card">
+            <div class="label">Revenue</div>
+            <div id="statRevenue" class="value">₱0.00</div>
+          </div>
+          <div class="card">
+            <div class="label">Customers</div>
+            <div id="statCustomers" class="value">0</div>
+          </div>
+        </div>
+
+        <h3 class="section-title">Recent orders</h3>
+        <div id="recentOrders"></div>
+      </section>
+
+      <section id="customers" class="view" style="display:none">
+        <h3 class="section-title">Customers</h3>
+        <div id="customersList"></div>
+      </section>
+
+      <section id="orders" class="view" style="display:none">
+        <h3 class="section-title">Orders</h3>
+        <div id="ordersList"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

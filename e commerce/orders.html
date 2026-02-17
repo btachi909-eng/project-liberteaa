@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>My Orders — 2 Shot Espresso</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="navbar">
+      <div class="logo"><img src="images/logo1.jpg.jfif" alt="Logo"></div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#Products">Products</a></li>
+          <li><a href="aboutus.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="orders.html">My Orders</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <main class="small-container" style="padding-top:30px;">
+    <h2 class="title">My Orders</h2>
+    <div id="ordersList" style="margin-top:12px; background:#fff; padding:14px; border-radius:8px; border:1px solid #eee;"></div>
+  </main>
+
+  <script>
+    (function () {
+      const listEl = document.getElementById('ordersList');
+      function formatPrice(p){ return '₱' + Number(p).toFixed(2); }
+      const orders = (() => { try { return JSON.parse(localStorage.getItem('ecommerce_orders') || '[]'); } catch (e) { return []; } })();
+      if (!orders.length) {
+        listEl.innerHTML = '<p class="muted">You have no orders yet.</p><p><a class="btn" href="index.html">Start shopping</a></p>';
+        return;
+      }
+      // newest first
+      orders.slice().reverse().forEach(order => {
+        const o = document.createElement('div');
+        o.className = 'order-row';
+        const created = new Date(order.createdAt).toLocaleString();
+        let itemsCount = 0; try { itemsCount = (order.items || []).reduce((s,i)=>s+(i.qty||1),0); } catch(e){}
+        // show Cancel button only when order is pending_cod
+        const cancellable = (order.status === 'pending_cod');
+        o.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">'
+          + '<div>'
+            + '<strong>' + order.id + '</strong>'
+            + '<div class="muted">' + created + ' • ' + itemsCount + ' items</div>'
+          + '</div>'
+          + '<div style="text-align:right">'
+            + '<div style="font-weight:700">' + formatPrice(order.total) + '</div>'
+            + '<div class="muted">' + (order.paymentMethod || '') + '</div>'
+            + '<div style="margin-top:8px">'
+              + '<a class="btn" href="order.html?order=' + encodeURIComponent(order.id) + '">View</a>'
+              + (cancellable ? (' <button class="btn cancel-btn" data-id="' + order.id + '" style="background:#d9534f; margin-left:8px">Cancel</button>') : '')
+            + '</div>'
+          + '</div>'
+        + '</div>';
+        listEl.appendChild(o);
+      });
+
+      // attach cancel handlers
+      function attachCancelHandlers() {
+        listEl.querySelectorAll('.cancel-btn').forEach(btn => {
+          btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const ordersAll = (() => { try { return JSON.parse(localStorage.getItem('ecommerce_orders') || '[]'); } catch (e) { return []; } })();
+            const idx = ordersAll.findIndex(o => o.id === id);
+            if (idx === -1) { showToast('Order not found', 'warning'); return; }
+            const ord = ordersAll[idx];
+            if (ord.status !== 'pending_cod') { showToast('Order cannot be cancelled', 'warning'); return; }
+            if (!confirm('Cancel order ' + id + '?')) return;
+            // remove order from storage
+            ordersAll.splice(idx, 1);
+            localStorage.setItem('ecommerce_orders', JSON.stringify(ordersAll));
+            showToast('Order cancelled and removed', 'success');
+            // remove from DOM immediately
+            const row = this.closest('.order-row');
+            if (row) row.parentNode.removeChild(row);
+          });
+        });
+      }
+      attachCancelHandlers();
+
+      
+      // simple toast helper used for confirmations
+      function showToast(text, type) {
+        let t = document.getElementById('toast');
+        if (!t) {
+          t = document.createElement('div');
+          t.id = 'toast';
+          t.className = 'toast';
+          document.body.appendChild(t);
+        }
+        t.textContent = text;
+        t.className = 'toast ' + (type || '');
+        t.classList.add('show');
+        clearTimeout(t._hideTimer);
+        t._hideTimer = setTimeout(() => { t.classList.remove('show'); }, 3000);
+      }
+    })();
+  </script>
+  <!-- toast container placeholder -->
+  <div id="toast" aria-live="polite" class="toast"></div>
+</body>
+</html>

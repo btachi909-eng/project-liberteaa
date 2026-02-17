@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Smoke tests — E-commerce demo</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;padding:20px;background:#fff}
+    .ok{color:green}
+    .bad{color:red}
+    pre{background:#f4f4f4;padding:10px;border-radius:4px}
+    li{margin:8px 0}
+  </style>
+</head>
+<body>
+  <h1>Smoke tests (localStorage demo)</h1>
+  <p>This page runs a small set of client-side checks for the localStorage auth flow (register → login → avatar swap → logout). It does not contact any server (unless your app pages are configured to do so).</p>
+
+  <ol id="results"></ol>
+  <script>
+    function addResult(text, ok) {
+      const li = document.createElement('li');
+      li.innerHTML = (ok ? '<span class="ok">✔</span> ' : '<span class="bad">✖</span> ') + text;
+      document.getElementById('results').appendChild(li);
+    }
+
+    (function runSmoke() {
+      // Keys used by the app
+      const ACC_KEY = 'ecommerce_accounts';
+      const USER_KEY = 'current_user';
+
+      // Clean slate
+      localStorage.removeItem(ACC_KEY);
+      localStorage.removeItem(USER_KEY);
+
+      addResult('Cleared localStorage keys', true);
+
+      // 1) Create an account (local-only)
+      const test = { fullname: 'Smoke Tester', email: 'smoke@example.test', password: btoa('Password1!'), created: new Date().toISOString() };
+      let accounts = [test];
+      localStorage.setItem(ACC_KEY, JSON.stringify(accounts));
+      addResult('Wrote test account to ' + ACC_KEY, true);
+
+      // 2) Try logging in (local check)
+      try {
+        const stored = JSON.parse(localStorage.getItem(ACC_KEY) || '[]');
+        const found = stored.find(a => a.email === 'smoke@example.test');
+        if (!found) { addResult('Account not found after write', false); return; }
+        if (found.password !== btoa('Password1!')) { addResult('Password mismatch', false); return; }
+        // set current_user as the app would on success
+        localStorage.setItem(USER_KEY, JSON.stringify({ email: found.email, fullname: found.fullname }));
+        addResult('Local login simulation succeeded and current_user written', true);
+      } catch (err) {
+        addResult('Error during local login simulation: ' + err.message, false);
+        return;
+      }
+
+      // 3) Simulate index.html behavior: check navbar swap condition
+      const current = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
+      if (current && current.email === 'smoke@example.test') {
+        addResult('index.html should show avatar for signed-in user (localStorage current_user present)', true);
+      } else {
+        addResult('index.html would NOT show avatar (current_user missing)', false);
+      }
+
+      // 4) Logout (clear) and verify
+      localStorage.removeItem(USER_KEY);
+      if (!localStorage.getItem(USER_KEY)) {
+        addResult('Logout simulation: current_user removed', true);
+      } else {
+        addResult('Logout simulation failed: current_user still present', false);
+      }
+
+      addResult('Smoke tests complete. If you have a server API, configure account.html API_ENDPOINT and run a server-backed test separately.', true);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Account — 2 Shot Espresso</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="account.css">
+</head>
+<body>
+  <div class="container">
+    <div class="navbar">
+      <div class="logo"><img src="images/logo1.jpg.jfif" alt="Logo"></div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#Products">Products</a></li>
+          <li><a href="aboutus.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="account-dashboard.html">Account</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <main class="account-section">
+    <div class="small-container">
+      <div class="account-card">
+        <h2>Account</h2>
+        <p class="account-note">Update your profile details below. These are stored locally in your browser for this demo.</p>
+
+        <form id="profileForm" novalidate>
+          <label for="p_fullname">Full name</label>
+          <input id="p_fullname" name="p_fullname" type="text" placeholder="Your full name">
+
+          <label for="p_address">Address</label>
+          <textarea id="p_address" name="p_address" rows="3" placeholder="Street, City, Zip"></textarea>
+
+          <div class="form-actions" style="margin-top:12px;">
+            <button type="submit" class="btn">Save profile</button>
+            <button id="logoutBtn" type="button" class="btn" style="background:#8d4409;">Logout</button>
+            <a class="link-muted" href="index.html">Home</a>
+          </div>
+
+          <div id="profileMessage" class="form-message" role="status" aria-live="polite" hidden></div>
+        </form>
+      </div>
+    </div>
+  </main>
+    <script>
+      (function () {
+        const form = document.getElementById('profileForm');
+        const msg = document.getElementById('profileMessage');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        function showMessage(text, type) {
+          if (!msg) return;
+          msg.hidden = false;
+          msg.textContent = text;
+          msg.className = 'form-message ' + (type === 'success' ? 'success' : 'error');
+        }
+
+        logoutBtn && logoutBtn.addEventListener('click', function () {
+          if (!confirm('Log out and return to home?')) return;
+          try { localStorage.removeItem('current_user'); } catch (e) {}
+          window.location.href = 'index.html';
+        });
+
+        // profiles stored under ecommerce_profiles as an object keyed by email
+        const PROFILES_KEY = 'ecommerce_profiles';
+
+        function loadProfiles() { try { return JSON.parse(localStorage.getItem(PROFILES_KEY) || '{}'); } catch (e) { return {}; } }
+        function saveProfiles(obj) { try { localStorage.setItem(PROFILES_KEY, JSON.stringify(obj)); } catch (e) {} }
+
+        // populate form from current_user and saved profile
+        try {
+          const cuRaw = localStorage.getItem('current_user');
+          if (!cuRaw) {
+            showMessage('You are not signed in. Please register or log in first.', 'error');
+          } else {
+            const cu = JSON.parse(cuRaw);
+            if (cu.fullname) document.getElementById('p_fullname').value = cu.fullname;
+            const profiles = loadProfiles();
+            const profile = profiles[cu.email] || {};
+            if (profile.address) document.getElementById('p_address').value = profile.address;
+          }
+        } catch (e) { /* ignore */ }
+
+        form && form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const cuRaw = localStorage.getItem('current_user');
+          if (!cuRaw) { showMessage('Please sign in first.', 'error'); return; }
+          const cu = JSON.parse(cuRaw);
+          const fullname = form.p_fullname.value.trim();
+          const address = form.p_address.value.trim();
+          if (!fullname) { showMessage('Full name is required.', 'error'); form.p_fullname.focus(); return; }
+          // persist locally
+          const profiles = loadProfiles();
+          profiles[cu.email] = profiles[cu.email] || {};
+          profiles[cu.email].fullname = fullname;
+          profiles[cu.email].address = address;
+          saveProfiles(profiles);
+          // update current_user display name
+          try { cu.fullname = fullname; localStorage.setItem('current_user', JSON.stringify(cu)); } catch (e) {}
+          showMessage('Profile saved locally.', 'success');
+        });
+      })();
+    </script>
+</body>
+</html>

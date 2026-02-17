@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Register — 2 Shot Espresso</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="account.css">
+  <!-- Icons are inline SVGs now (no external icon font) -->
+</head>
+<body>
+  <div class="container">
+    <div class="navbar">
+      <div class="logo"><img src="images/logo1.jpg" alt="Logo"></div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#Products">Products</a></li>
+          <li><a href="aboutus.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <main class="account-section">
+    <div class="small-container">
+      <div class="account-card">
+        <h2 id="panelTitle">Register</h2>
+
+        <div class="form-switch" style="margin-bottom:10px">
+          <a href="#" id="showRegister" class="link-muted" style="margin-right:12px">Register</a>
+          <a href="#" id="showLogin" class="link-muted">Log in</a>
+        </div>
+
+        <!-- Login panel (hidden by default) -->
+        <div id="loginPanel" hidden>
+          <form id="loginForm" novalidate>
+            <label for="loginEmail">Email</label>
+            <input id="loginEmail" name="loginEmail" type="email" required placeholder="you@example.com">
+
+            <label for="loginPassword">Password</label>
+            <div class="pw-field">
+              <input id="loginPassword" name="loginPassword" type="password" required placeholder="Your password">
+              <label class="switch" title="Show password">
+                <input type="checkbox" class="show-pw-checkbox" data-target="loginPassword" aria-label="Show password">
+                <span class="slider" aria-hidden="true"></span>
+                <span class="label-text">Show</span>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn">Log in</button>
+              <a class="link-muted" href="index.html">Cancel</a>
+            </div>
+          </form>
+          <div style="margin-top:8px"><a href="#" id="toRegister" class="link-muted">Don't have an account? Register</a></div>
+        </div>
+
+        <!-- Register panel -->
+        <div id="registerPanel">
+        <form id="accountForm" action="index.html" method="get" novalidate>
+          <label for="fullname">Full name</label>
+          <input id="fullname" name="fullname" type="text" required placeholder="Your full name">
+
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required placeholder="you@example.com">
+
+          <label for="password">Password</label>
+          <div class="pw-field">
+            <input id="password" name="password" type="password" required minlength="6" placeholder="Enter password">
+      <label class="switch" title="Show password">
+        <input type="checkbox" class="show-pw-checkbox" data-target="password" aria-label="Show password">
+        <span class="slider" aria-hidden="true"></span>
+        <span class="label-text">Show</span>
+      </label>
+          </div>
+
+          <label for="confirm">Confirm password</label>
+          <div class="pw-field">
+            <input id="confirm" name="confirm" type="password" required minlength="6" placeholder="Re-enter password">
+      <label class="switch" title="Show confirm password">
+        <input type="checkbox" class="show-pw-checkbox" data-target="confirm" aria-label="Show confirm password">
+        <span class="slider" aria-hidden="true"></span>
+        <span class="label-text">Show</span>
+      </label>
+          </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">Register</button>
+                <a class="link-muted" href="index.html">Cancel</a>
+              </div>
+          </form>
+          <div style="margin-top:8px"><a href="#" id="toLogin" class="link-muted">Already have an account? Log in</a></div>
+          </div>
+
+            <!-- Inline message area (accessible) -->
+            <div id="formMessage" class="form-message" role="status" aria-live="polite" hidden></div>
+
+          </form>
+          <p class="account-note">By creating an account you agree to our <a href="#">terms</a>.</p>
+      </div>
+    </div>
+  </main>
+
+    <script>
+    (function () {
+      const form = document.getElementById('accountForm');
+      const msg = document.getElementById('formMessage');
+
+      // Configure your API endpoint here. Leave empty to use localStorage-only prototype.
+      // Example: const API_ENDPOINT = 'https://your-server.example.com/api/register';
+      const API_ENDPOINT = ''; // <-- set your server endpoint if available
+
+      function showMessage(text, type) {
+        msg.hidden = false;
+        msg.textContent = text;
+        msg.className = 'form-message ' + (type === 'success' ? 'success' : 'error');
+      }
+
+      function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      // Password visibility toggles removed — eye buttons disabled to avoid browser/extension conflicts
+
+      // Show-password checkbox wiring
+      function wireShowPasswordCheckboxes() {
+        document.querySelectorAll('.show-pw-checkbox').forEach(function (cb) {
+          cb.addEventListener('change', function () {
+            var targetId = cb.getAttribute('data-target');
+            var input = document.getElementById(targetId);
+            if (!input) return;
+            try {
+              input.type = cb.checked ? 'text' : 'password';
+              if (cb.checked) {
+                input.focus();
+                var len = input.value ? input.value.length : 0;
+                if (typeof input.setSelectionRange === 'function') input.setSelectionRange(len, len);
+              }
+            } catch (e) { /* ignore */ }
+          });
+        });
+      }
+
+      // wire checkboxes immediately
+      wireShowPasswordCheckboxes();
+
+      // Panel switching (Register <-> Login)
+      function showPanel(name) {
+        const loginPanel = document.getElementById('loginPanel');
+        const registerPanel = document.getElementById('registerPanel');
+        const title = document.getElementById('panelTitle');
+        if (name === 'login') {
+          loginPanel.hidden = false;
+          registerPanel.hidden = true;
+          title.textContent = 'Log in';
+        } else {
+          loginPanel.hidden = true;
+          registerPanel.hidden = false;
+          title.textContent = 'Register';
+        }
+        // re-wire show-password checkboxes in case panels were dynamically changed
+        wireShowPasswordCheckboxes();
+      }
+
+      document.getElementById('showLogin').addEventListener('click', function (e) { e.preventDefault(); showPanel('login'); });
+      document.getElementById('showRegister').addEventListener('click', function (e) { e.preventDefault(); showPanel('register'); });
+      document.getElementById('toLogin').addEventListener('click', function (e) { e.preventDefault(); showPanel('login'); });
+      document.getElementById('toRegister').addEventListener('click', function (e) { e.preventDefault(); showPanel('register'); });
+
+      // Login form handler: prefer server login when API_ENDPOINT is set, otherwise fall back to localStorage
+      document.getElementById('loginForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+        const password = document.getElementById('loginPassword').value;
+        if (!email || !password) { showMessage('Please enter email and password.', 'error'); return; }
+
+        // If an API endpoint is configured, try server login first.
+        if (API_ENDPOINT) {
+          showMessage('Contacting server…', 'success');
+          try {
+            const loginUrl = API_ENDPOINT.replace(/\/$/, '') + '/login';
+            const res = await fetch(loginUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: email, password: password })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (res.ok) {
+              // Expect the server to return at least { email, fullname }
+              const user = (data && data.user) ? data.user : data;
+              const userObj = { email: user.email || email, fullname: user.fullname || user.name || '' };
+              try { localStorage.setItem('current_user', JSON.stringify(userObj)); } catch (err) {}
+              showMessage('Logged in (server) — redirecting...', 'success');
+              setTimeout(() => { window.location.href = 'index.html'; }, 800);
+              return;
+            }
+            // server returned an error; show it and fall back to local
+            showMessage('Server login failed: ' + (data && data.message ? data.message : ('Status ' + res.status)) + ' — falling back locally.', 'error');
+          } catch (err) {
+            showMessage('Network/server error — falling back to local login.', 'error');
+          }
+        }
+
+        // Local fallback: check localStorage accounts
+        let accounts = [];
+        try { accounts = JSON.parse(localStorage.getItem('ecommerce_accounts') || '[]'); } catch (err) { accounts = []; }
+        const acc = accounts.find(a => a.email === email);
+        if (!acc) { showMessage('No account found with that email.', 'error'); return; }
+        if (acc.password !== btoa(password)) { showMessage('Incorrect password.', 'error'); return; }
+        try { localStorage.setItem('current_user', JSON.stringify({ email: acc.email, fullname: acc.fullname })); } catch (e) {}
+        showMessage('Logged in — redirecting...', 'success');
+        setTimeout(() => { window.location.href = 'index.html'; }, 800);
+      });
+
+      async function submitToServer(payload) {
+        try {
+          const res = await fetch(API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+
+          const data = await res.json().catch(() => ({}));
+          if (res.ok) return { ok: true, data };
+          return { ok: false, error: data && data.message ? data.message : ('Server returned ' + res.status) };
+        } catch (err) {
+          return { ok: false, error: err.message || 'Network error' };
+        }
+      }
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const fullname = form.fullname.value.trim();
+        const email = form.email.value.trim().toLowerCase();
+        const password = form.password.value;
+        const confirm = form.confirm.value;
+
+        if (!fullname) {
+          showMessage('Please enter your full name.', 'error');
+          form.fullname.focus();
+          return;
+        }
+        if (!validateEmail(email)) {
+          showMessage('Please enter a valid email address.', 'error');
+          form.email.focus();
+          return;
+        }
+        if (password.length < 6) {
+          showMessage('Password must be at least 6 characters.', 'error');
+          form.password.focus();
+          return;
+        }
+        if (password !== confirm) {
+          showMessage('Passwords do not match.', 'error');
+          form.confirm.focus();
+          return;
+        }
+
+        const payload = { fullname, email, password };
+
+        // If an API_ENDPOINT is configured, try to POST to server first.
+        if (API_ENDPOINT) {
+          showMessage('Creating account…', 'success');
+          const result = await submitToServer(payload);
+          if (result.ok) {
+            // mark this user as current (signed in) for the client-side demo
+            try { localStorage.setItem('current_user', JSON.stringify({ email: email, fullname: fullname })); } catch (e) {}
+            showMessage('Account created on server — redirecting...', 'success');
+            setTimeout(() => window.location.href = 'index.html', 900);
+            return;
+          }
+          // Server failed: show error and fall back to local save
+          showMessage('Server error: ' + result.error + ' — saving locally as backup.', 'error');
+        }
+
+        // Fallback / local prototype behavior: save to localStorage
+        let accounts = [];
+        try { accounts = JSON.parse(localStorage.getItem('ecommerce_accounts') || '[]'); } catch (err) { accounts = []; }
+        if (accounts.some(a => a.email === email)) {
+          showMessage('An account with that email already exists (local).', 'error');
+          form.email.focus();
+          return;
+        }
+
+        const record = { fullname, email, password: btoa(password), created: new Date().toISOString() };
+        accounts.push(record);
+        localStorage.setItem('ecommerce_accounts', JSON.stringify(accounts));
+        // set current signed-in user (client-side) so navbar can show profile
+        try { localStorage.setItem('current_user', JSON.stringify({ email: email, fullname: fullname })); } catch (e) {}
+
+        showMessage('Account saved locally — redirecting...', 'success');
+        setTimeout(() => { window.location.href = 'index.html'; }, 900);
+      });
+    })();
+    </script>
+</body>
+</html>

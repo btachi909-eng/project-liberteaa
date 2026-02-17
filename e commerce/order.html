@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Order Confirmation — 2 Shot Espresso</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="navbar">
+      <div class="logo"><img src="images/logo1.jpg" alt="Logo"></div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#Products">Products</a></li>
+          <li><a href="aboutus.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="orders.html">My Orders</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <main class="small-container" style="padding-top:30px;">
+    <h2 class="title">Order Confirmation</h2>
+    <div id="orderContent" style="margin-top:18px; background:#fff; padding:14px; border-radius:8px; border:1px solid #eee;"></div>
+  </main>
+
+  <script>
+    (function () {
+      function qs(k){ const u=new URL(location.href); return u.searchParams.get(k); }
+      const id = qs('order') || localStorage.getItem('last_order_id');
+      const out = document.getElementById('orderContent');
+      function formatPrice(p){ return '₱' + Number(p).toFixed(2); }
+      if (!id) {
+        out.innerHTML = '<p class="muted">No order found.</p><p><a class="btn" href="index.html">Continue shopping</a></p>';
+        return;
+      }
+      const orders = (() => { try { return JSON.parse(localStorage.getItem('ecommerce_orders') || '[]'); } catch (e) { return []; } })();
+      const order = orders.find(o => o.id === id) || orders[orders.length-1];
+      if (!order) {
+        out.innerHTML = '<p class="muted">Order not found.</p><p><a class="btn" href="index.html">Continue shopping</a></p>';
+        return;
+      }
+      // render order
+      let html = '<p><strong>Order ID:</strong> ' + order.id + '</p>';
+      html += '<p><strong>Placed:</strong> ' + new Date(order.createdAt).toLocaleString() + '</p>';
+      html += '<p><strong>Payment:</strong> ' + (order.paymentMethod || 'cod') + '</p>';
+      html += '<p><strong>Status:</strong> ' + (order.status || '') + '</p>';
+      if (order.shipping) {
+        html += '<hr>';
+        html += '<h3 style="margin:8px 0 6px 0">Shipping details</h3>';
+        html += '<p style="margin:4px 0"><strong>' + (order.shipping.name || '') + '</strong>' + (order.shipping.phone ? (' • ' + order.shipping.phone) : '') + '</p>';
+        // show full address in one line (supports old shapes too)
+        const addr = (order.shipping.address) ? order.shipping.address : [order.shipping.address1 || '', order.shipping.address2 || '', order.shipping.city || '', order.shipping.postal || ''].filter(Boolean).join(', ');
+        html += '<p class="muted" style="margin:2px 0">' + addr + '</p>';
+      }
+      html += '<hr>';
+      html += '<div class="order-items">';
+      order.items.forEach(it => {
+        html += '<div style="display:flex; gap:12px; align-items:center; padding:8px 0; border-bottom:1px solid #f2f2f2">';
+        html += '<img src="' + (it.image || 'images/product1.jpg') + '" style="width:64px; height:64px; object-fit:cover; border-radius:6px">';
+        html += '<div style="flex:1"><strong>' + (it.title||'Item') + '</strong><div class="muted">' + (it.size ? ('Size: ' + it.size) : '') + ' • Qty: ' + (it.qty||1) + '</div></div>';
+        html += '<div>' + formatPrice(Number(it.price||0) * (Number(it.qty||1))) + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+      html += '<hr><p style="text-align:right; font-weight:700">Total: ' + formatPrice(order.total) + '</p>';
+      html += '<p style="margin-top:14px"><a class="btn" href="index.html">Continue shopping</a></p>';
+      out.innerHTML = html;
+    })();
+  </script>
+</body>
+</html>

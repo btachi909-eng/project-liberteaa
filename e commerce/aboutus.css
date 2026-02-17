@@ -1,0 +1,63 @@
+/* Styles for About Us page */
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #f5d0ae; /* requested background */
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+  color: #3b2b1a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.about-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.about-inner {
+  background: rgba(255,255,255,0.9);
+  max-width: 900px;
+  padding: 28px 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+}
+
+.about-inner h1 {
+  font-size: 28px;
+  margin-bottom: 12px;
+  color: #2e1f14;
+}
+
+.about-inner p {
+  line-height: 1.8;
+  margin-bottom: 14px;
+  color: #3b2b1a;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.back-btn {
+  display: inline-block;
+  margin-top: 12px;
+  background: #ff523b;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 24px;
+  text-decoration: none;
+}
+
+.back-btn:hover {
+  background: #e0472d;
+}
+
+@media (max-width: 600px) {
+  .about-inner { padding: 18px; }
+  .about-inner h1 { font-size: 22px; }
+}

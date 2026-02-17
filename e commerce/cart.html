@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Your Cart — 2 Shot Espresso</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="cart.css">
+</head>
+<body>
+  <div class="container">
+    <div class="navbar">
+      <div class="logo"><img src="images/logo1.jpg.jfif" alt="Logo"></div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#Products">Products</a></li>
+          <li><a href="aboutus.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="orders.html">My Orders</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <main class="cart-section">
+    <div class="small-container">
+      <h2 class="title">Your Cart</h2>
+      <div id="cartContent" class="cart-content">
+        <!-- JS will render cart items here -->
+      </div>
+      <div class="cart-actions">
+        <a class="btn" id="continueBtn" href="index.html">Continue shopping</a>
+        <button class="btn" id="clearCartBtn">Clear cart</button>
+      </div>
+      <!-- Payment method -->
+      <section class="payment-section" aria-labelledby="paymentHeading">
+        <!-- Shipping address: simplified required fields -->
+        <div class="shipping-section" style="margin-bottom:12px;">
+          <h3 id="shippingHeading">Shipping</h3>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <input id="shipName" type="text" placeholder="Full name" style="flex:1; min-width:220px; padding:8px;" required>
+            <input id="shipAddress" type="text" placeholder="Full shipping address (street, city, region)" style="flex-basis:100%; padding:8px;" required>
+            <input id="shipPhone" type="tel" placeholder="Phone number" style="flex:1; min-width:160px; padding:8px;" required>
+          </div>
+        </div>
+        <h3 id="paymentHeading">Payment</h3>
+        <div>
+          <label style="display:block; margin:6px 0;"><input type="radio" name="payment" value="cod" checked> Cash on Delivery (COD)</label>
+        </div>
+        <div style="margin-top:10px"><button id="placeOrderBtn" class="btn">Place order</button></div>
+      </section>
+      <!-- Customer feedback / suggestions -->
+      <section class="feedback-section" aria-labelledby="feedbackHeading">
+        <h3 id="feedbackHeading">Share your experience</h3>
+        <form id="feedbackForm">
+          <input id="fbName" type="text" placeholder="Your name (optional)">
+          <input id="fbEmail" type="email" placeholder="Email (optional)">
+          <label for="fbRating">Rating</label>
+          <select id="fbRating">
+            <option value="5">5 — Excellent</option>
+            <option value="4">4 — Very good</option>
+            <option value="3">3 — Good</option>
+            <option value="2">2 — Fair</option>
+            <option value="1">1 — Poor</option>
+          </select>
+          <textarea id="fbMessage" placeholder="Tell us about your experience or suggestions..." required></textarea>
+          <div style="margin-top:8px;"><button type="submit" class="btn">Submit feedback</button></div>
+        </form>
+        <div id="feedbackList" style="margin-top:12px"></div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      const cartKey = 'ecommerce_cart';
+      const container = document.getElementById('cartContent');
+      const clearBtn = document.getElementById('clearCartBtn');
+
+      function formatPrice(p) { return '₱' + Number(p).toFixed(2); }
+
+      function updateCartBadge() {
+        const items = (() => { try { return JSON.parse(localStorage.getItem(cartKey) || '[]'); } catch (e) { return []; } })();
+        const count = items.reduce((s,i) => s + (i.qty||1), 0);
+        const a = document.querySelector('nav a[href="cart.html"]');
+        if (!a) return;
+        let badge = a.querySelector('.cart-badge');
+        if (!badge) { badge = document.createElement('span'); badge.className = 'cart-badge'; a.appendChild(badge); }
+        badge.textContent = count; badge.style.display = count ? 'inline-block' : 'none';
+      }
+
+      function render() {
+        let items = [];
+        try { items = JSON.parse(localStorage.getItem(cartKey) || '[]'); } catch (e) { items = []; }
+        container.innerHTML = '';
+        if (!items.length) {
+          container.innerHTML = '<p class="muted">Your cart is empty.</p>';
+          clearBtn.disabled = true;
+          updateCartBadge();
+          return;
+        }
+        clearBtn.disabled = false;
+        const list = document.createElement('div');
+        list.className = 'cart-list';
+        let total = 0;
+        items.forEach((it, idx) => {
+          const el = document.createElement('div');
+          el.className = 'cart-item';
+          const itemPrice = Number(it.price || 0);
+          const qty = Number(it.qty || 1);
+          total += itemPrice * qty;
+          // prepare size options
+          let sizeHtml = '';
+          try {
+            const prices = it.prices || { Grande: it.price, Venti: it.price };
+            sizeHtml = '<select class="cart-size-select" data-idx="' + idx + '">';
+            sizeHtml += '<option value="' + (prices.Grande || 0) + '"' + (it.size === 'Grande' ? ' selected' : '') + '>Grande — ₱' + (prices.Grande ? Number(prices.Grande).toFixed(2) : '0.00') + '</option>';
+            sizeHtml += '<option value="' + (prices.Venti || 0) + '"' + (it.size === 'Venti' ? ' selected' : '') + '>Venti — ₱' + (prices.Venti ? Number(prices.Venti).toFixed(2) : '0.00') + '</option>';
+            sizeHtml += '</select>';
+          } catch (e) { sizeHtml = it.size ? ('<div class="muted">Size: ' + it.size + '</div>') : ''; }
+
+          el.innerHTML = `
+            <div class="cart-thumb"><img src="${it.image || 'images/product1.jpg'}" alt="${it.title || ''}"></div>
+            <div class="cart-meta">
+              <h4>${it.title || 'Item'}</h4>
+              ${sizeHtml}
+            </div>
+            <div class="cart-qty"><div class="qty-controls" data-idx="${idx}">
+              <button class="qty-decrease" data-idx="${idx}">-</button>
+              <span class="qty-value">${qty}</span>
+              <button class="qty-increase" data-idx="${idx}">+</button>
+            </div></div>
+            <div class="cart-price">${formatPrice(itemPrice * qty)}</div>
+            <div class="cart-remove"><button data-idx="${idx}" class="remove-btn">Remove</button></div>
+          `;
+          list.appendChild(el);
+        });
+        container.appendChild(list);
+
+        // total
+        const totalEl = document.createElement('div');
+        totalEl.className = 'cart-total';
+        totalEl.textContent = 'Total: ' + formatPrice(total);
+        container.appendChild(totalEl);
+
+        // wire remove buttons
+        container.querySelectorAll('.remove-btn').forEach(btn => {
+          btn.addEventListener('click', function () {
+            const i = Number(this.dataset.idx);
+            items.splice(i, 1);
+            localStorage.setItem(cartKey, JSON.stringify(items));
+            render();
+          });
+        });
+
+        // wire qty controls
+        container.querySelectorAll('.qty-controls').forEach(ctrl => {
+          const idx = Number(ctrl.dataset.idx);
+          const dec = ctrl.querySelector('.qty-decrease');
+          const inc = ctrl.querySelector('.qty-increase');
+          dec.addEventListener('click', function () {
+            if (!items[idx]) return;
+            items[idx].qty = Math.max(1, (items[idx].qty||1) - 1);
+            localStorage.setItem(cartKey, JSON.stringify(items));
+            render();
+          });
+          inc.addEventListener('click', function () {
+            if (!items[idx]) return;
+            items[idx].qty = (items[idx].qty||1) + 1;
+            localStorage.setItem(cartKey, JSON.stringify(items));
+            render();
+          });
+        });
+
+        // wire size selectors inside cart
+        container.querySelectorAll('.cart-size-select').forEach(sel => {
+          const idx = Number(sel.dataset.idx);
+          sel.addEventListener('change', function () {
+            const val = Number(this.value);
+            if (!items[idx]) return;
+            items[idx].price = val;
+            // set size label from selected option text before the dash
+            const txt = this.options[this.selectedIndex].text.split('\u2014')[0].trim();
+            items[idx].size = txt;
+            localStorage.setItem(cartKey, JSON.stringify(items));
+            render();
+          });
+        });
+
+        updateCartBadge();
+      }
+
+      clearBtn.addEventListener('click', function () {
+        if (!confirm('Clear all items from your cart?')) return;
+        localStorage.removeItem(cartKey);
+        render();
+      });
+
+      // Feedback form handling
+      const fbKey = 'ecommerce_feedback';
+      const fbForm = document.getElementById('feedbackForm');
+      const fbList = document.getElementById('feedbackList');
+
+      function readFeedback() {
+        try { return JSON.parse(localStorage.getItem(fbKey) || '[]'); } catch (e) { return []; }
+      }
+      function writeFeedback(arr) { localStorage.setItem(fbKey, JSON.stringify(arr)); }
+
+      function escapeHtml(s) {
+        return String(s || '').replace(/[&<>"']/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[c]; });
+      }
+
+      function renderFeedback() {
+        const items = readFeedback();
+        if (!fbList) return;
+        fbList.innerHTML = '';
+        if (!items.length) { fbList.innerHTML = '<p class="muted">No feedback yet.</p>'; return; }
+        // show newest first
+        items.slice().reverse().forEach(fb => {
+          const d = document.createElement('div');
+          d.className = 'fb-item';
+          d.innerHTML = '<strong>' + escapeHtml(fb.name || 'Anonymous') + '</strong> <span class="muted">• ' + new Date(fb.ts).toLocaleString() + '</span>' +
+            '<div class="muted">Rating: ' + (fb.rating || '—') + '</div>' +
+            '<p>' + escapeHtml(fb.message) + '</p>';
+          fbList.appendChild(d);
+        });
+      }
+
+      if (fbForm) {
+        fbForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const name = document.getElementById('fbName').value.trim();
+          const email = document.getElementById('fbEmail').value.trim();
+          const rating = document.getElementById('fbRating').value;
+          const message = document.getElementById('fbMessage').value.trim();
+          if (!message) { showToast('Please enter a message.', 'warning'); return; }
+          const arr = readFeedback();
+          arr.push({ name: name || null, email: email || null, rating: rating || null, message: message, ts: Date.now() });
+          writeFeedback(arr);
+          fbForm.reset();
+          renderFeedback();
+          // try to sync to server if API endpoint is configured
+          const payload = { name: name || null, email: email || null, rating: rating || null, message: message, ts: Date.now() };
+          const apiBase = (window.API_ENDPOINT || '').replace(/\/$/, '');
+          if (apiBase) {
+            fetch(apiBase + '/feedback', {
+              method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+            }).then(resp => {
+              if (!resp.ok) throw new Error('server');
+              showToast('Thanks — feedback sent.', 'success');
+            }).catch(err => {
+              console.warn('Feedback sync failed', err);
+              showToast('Saved locally — server sync failed.', 'warning');
+            });
+          } else {
+            showToast('Thanks for your feedback!', 'success');
+          }
+        });
+      }
+
+      // initial render of feedback
+      renderFeedback();
+
+      // Payment handling (COD / card)
+      const paymentKey = 'ecommerce_payment';
+      const paymentRadios = document.querySelectorAll('input[name="payment"]');
+      const placeOrderBtn = document.getElementById('placeOrderBtn');
+
+      function readPayment() {
+        // Force COD while Pay Online is unavailable. If a non-supported value is stored,
+        // reset it to 'cod' so the UI and order flow remain consistent.
+        try {
+          const v = localStorage.getItem(paymentKey);
+          if (v === 'cod') return 'cod';
+        } catch (e) {}
+        localStorage.setItem(paymentKey, 'cod');
+        return 'cod';
+      }
+      function writePayment(v) {
+        // Only persist COD for now.
+        localStorage.setItem(paymentKey, 'cod');
+      }
+
+      // initialize radios
+      paymentRadios.forEach(r => { r.checked = (r.value === readPayment()); r.addEventListener('change', () => writePayment(r.value)); });
+
+      if (placeOrderBtn) {
+        placeOrderBtn.addEventListener('click', function () {
+          const items = (() => { try { return JSON.parse(localStorage.getItem(cartKey) || '[]'); } catch (e) { return []; } })();
+          if (!items.length) { showToast('Your cart is empty.', 'warning'); return; }
+
+          // read shipping inputs and validate (simplified: name, full address, phone)
+          const shipName = (document.getElementById('shipName') || {}).value || '';
+          const shipAddress = (document.getElementById('shipAddress') || {}).value || '';
+          const shipPhone = (document.getElementById('shipPhone') || {}).value || '';
+          if (!shipName.trim() || !shipPhone.trim() || !shipAddress.trim()) {
+            showToast('Please provide your name, full address and phone number for shipping.', 'warning');
+            return;
+          }
+
+          const paymentMethod = readPayment();
+          const total = items.reduce((s, it) => s + (Number(it.price || 0) * (Number(it.qty || 1))), 0);
+          const orders = (() => { try { return JSON.parse(localStorage.getItem('ecommerce_orders') || '[]'); } catch (e) { return []; } })();
+          const order = {
+            id: 'ORD' + Date.now(),
+            items: items,
+            total: total,
+            paymentMethod: paymentMethod,
+            status: paymentMethod === 'cod' ? 'pending_cod' : 'paid',
+            createdAt: Date.now(),
+            shipping: {
+              name: shipName.trim(),
+              phone: shipPhone.trim(),
+              address: shipAddress.trim()
+            }
+          };
+          orders.push(order);
+          localStorage.setItem('ecommerce_orders', JSON.stringify(orders));
+          // remember last order id and clear cart
+          localStorage.setItem('last_order_id', order.id);
+          localStorage.removeItem(cartKey);
+          updateCartBadge();
+          // optionally remember shipping info for next time
+          try { localStorage.setItem('ecommerce_shipping', JSON.stringify(order.shipping)); } catch (e) {}
+          // redirect to order confirmation page
+          window.location.href = 'order.html?order=' + encodeURIComponent(order.id);
+        });
+      }
+
+      // Toast utility
+      function showToast(text, type) {
+        let t = document.getElementById('toast');
+        if (!t) return; // no toast element
+        t.textContent = text;
+        t.className = 'toast ' + (type || '');
+        t.classList.add('show');
+        clearTimeout(t._hideTimer);
+        t._hideTimer = setTimeout(() => { t.classList.remove('show'); }, 3500);
+      }
+
+      // Prefill shipping fields if user previously entered shipping info
+      try {
+        const saved = JSON.parse(localStorage.getItem('ecommerce_shipping') || 'null');
+        if (saved) {
+          if (document.getElementById('shipName')) document.getElementById('shipName').value = saved.name || '';
+          if (document.getElementById('shipPhone')) document.getElementById('shipPhone').value = saved.phone || '';
+          // support both old shape (address1/city/postal) and new shape (address)
+          let full = '';
+          if (saved.address) full = saved.address;
+          else {
+            const parts = [];
+            if (saved.address1) parts.push(saved.address1);
+            if (saved.address2) parts.push(saved.address2);
+            if (saved.city) parts.push(saved.city);
+            if (saved.postal) parts.push(saved.postal);
+            full = parts.join(', ');
+          }
+          if (document.getElementById('shipAddress')) document.getElementById('shipAddress').value = full || '';
+        }
+      } catch (e) { /* ignore */ }
+
+      render();
+    })();
+  </script>
+  <!-- toast container -->
+  <div id="toast" aria-live="polite" class="toast"></div>
+</body>
+</html>

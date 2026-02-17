@@ -1,0 +1,12 @@
+{
+  "name": "ecommerce-smoke-tests",
+  "version": "1.0.0",
+  "description": "Puppeteer smoke tests for the static e-commerce demo",
+  "private": true,
+  "scripts": {
+    "test:smoke": "node tests/smoke.test.js"
+  },
+  "devDependencies": {
+    "puppeteer": "^21.8.0"
+  }
+}

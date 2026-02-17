@@ -1,0 +1,298 @@
+.logo img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Fonts consolidated here for the whole site */
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Smaller logo when inside the fixed navbar to reduce navbar height */
+.navbar .logo img {
+    width: 44px;
+    height: 44px;
+}
+/* small circular avatar in navbar */
+.nav-avatar{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: inline-block;
+    vertical-align: middle;
+    border: 2px solid rgba(255,255,255,0.06);
+}
+/* small star icon used in ratings */
+.icon-star{ vertical-align: middle; margin-right:6px; }
+*{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', Arial, sans-serif;
+}
+
+/* Headings use Oswald for consistent display */
+h1, h2, h3, h4, h5 {
+    font-family: 'Oswald', Arial, sans-serif;
+}
+
+/* Smooth scroll for in-page anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Offset for fixed navbar so anchor targets are not hidden under it */
+:root {
+    --nav-offset: 56px;
+}
+
+[id] {
+    scroll-margin-top: var(--nav-offset);
+}
+
+/* Removed invalid Oswald uniquifier block */
+body{
+    background: #f5d0ae; /* brown background */
+    padding-top: 56px; /* reserve space for fixed navbar (smaller) */
+}
+
+.navbar{
+    display: flex;
+    align-items: center;
+    padding: 6px 12px; /* even smaller height */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 9999;
+    background: rgba(255,255,255,0.06); /* mostly transparent */
+    backdrop-filter: blur(6px); /* subtle blur for readability */
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+}
+
+nav{
+    flex: 1;
+    text-align: right;
+}
+
+nav ul{
+    display: inline-block;
+    list-style-type: none;
+}
+
+nav ul li{
+    display: inline-block;
+    margin-right: 32px; /* Increased spacing */
+}
+
+nav ul li:last-child {
+    margin-right: 0; /* Remove margin from last item */
+}
+
+nav ul li a {
+    padding: 8px 12px; /* Add padding for clickable area */
+}
+
+a{
+    text-decoration: none;
+    color: #555;
+    transition: 0.3s;
+}
+
+a:hover{
+    color: #f39a47; /* hover effect sa links */
+}
+
+p{
+    color: #555;
+}
+
+.container{
+    max-width: 1300px;
+    margin: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.row{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.col-2{
+    flex-basis: 50%;
+    min-width: 300px;
+}
+
+.col-2 img{
+    max-width: 100%;
+    padding: 50px 0;
+}
+
+.btn{
+    display: inline-block;
+    background: #ff523b;
+    color: #fff;
+    padding: 10px 30px;
+    margin-top: 20px;
+    border-radius: 30px;
+    transition: background 0.3s;
+}
+
+.btn:hover{
+    background: #f3d584;
+}
+.col-3 img{
+    width: 100%;
+}
+.small-container{
+    max-width: 1080px;
+    margin: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+/* Layout helpers: ensure rows and columns align */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -12px;
+    margin-right: -12px;
+}
+
+.col-4 {
+    width: 25%;
+    padding-left: 12px;
+    padding-right: 12px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+    .col-4 { width: 50%; }
+}
+
+@media (max-width: 480px) {
+    .col-4 { width: 100%; }
+}
+
+.categories{
+    margin: 70px 0;
+}
+.col-3{
+    flex-basis: 30%;
+    min-width: 250px;
+    margin-bottom: 30px;
+    padding: 0 10px;
+}
+.col-3 img{
+    width: 100%;
+}
+.small-container{
+    max-width: 1080px;
+    margin: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+.col-4{
+    flex-basis: 25%;
+    padding: 10px;
+    min-width: 200px;
+    margin-bottom: 50px;
+    transition: transform 0.5s;
+}
+.col-4 img{
+    width: 100%;
+    height: 220px; /* fixed height for consistent tiles */
+    object-fit: cover;
+    border-radius: 8px;
+}
+.title{
+    text-align: center;
+    font-size: 30px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    position: relative;
+    color: #555;
+}
+.title::after{
+    content: '';
+    width: 100px;
+    height: 3px;
+    background: #8d4409;
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+}
+
+h4{
+    font-weight: normal;
+    color: #555;
+    font-size: 18px;
+    margin: 10px 0;
+}
+.col-4 p{
+    font-size: 14px;
+    color: #8d4409;
+}
+.rating .fa{
+    color: #8d4409;
+    font-size: 14px;
+}
+
+.col-4:hover{
+transform: translateY(-5px);
+}
+
+/* Add-to-cart button and navbar cart badge */
+.col-4 .add-to-cart{ display:inline-block; margin-top:8px; background:#ff523b; color:#fff; border:0; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:14px }
+.col-4 .add-to-cart:hover{ background:#e14b34 }
+.cart-badge{ display:inline-block; min-width:20px; padding:2px 6px; background:#ff523b; color:#fff; border-radius:999px; font-size:12px; vertical-align:middle; margin-left:6px }
+
+/* Flying product thumbnail used for add-to-cart animation */
+.fly-img{ position:fixed; z-index:99999; pointer-events:none; border-radius:8px; will-change:transform,opacity; box-shadow:0 8px 18px rgba(0,0,0,0.18); }
+
+/* Size selector and quantity controls */
+.size-select{ margin-top:8px; display:block; width:100%; max-width:220px; padding:8px 10px; border-radius:8px; border:1px solid rgba(0,0,0,0.08); background:#fff }
+.qty-controls{ display:inline-flex; align-items:center; gap:6px }
+.qty-controls button{ background:#eee; border:1px solid rgba(0,0,0,0.06); padding:6px 8px; border-radius:6px; cursor:pointer }
+.cart-item .qty-controls{ margin-left:auto }
+.cart-total{ text-align:right; margin-top:12px; font-weight:700; color:#8d4409 }
+
+/* Search bar in navbar */
+.search-wrap{ display:inline-block; margin-left:16px; vertical-align:middle }
+.search-wrap form{ display:flex; align-items:center; gap:6px }
+.search-wrap input[type="search"]{ padding:8px 10px; border-radius:20px; border:1px solid rgba(0,0,0,0.08); width:220px; transition:box-shadow .15s ease }
+.search-wrap input[type="search"]:focus{ outline:none; box-shadow:0 6px 18px rgba(0,0,0,0.08) }
+.search-btn{ background:transparent; border:0; cursor:pointer; font-size:16px; color:#555 }
+.search-clear{ background:transparent; border:0; cursor:pointer; font-size:16px; color:#999 }
+.search-info{ font-size:13px; color:#555; margin-left:12px }
+
+@media (max-width: 700px){
+    .search-wrap input[type="search"]{ width:140px }
+}
+
+/* Payment and order styles */
+.payment-section { background:#fff; border:1px solid #eee; padding:12px; margin-top:14px; border-radius:6px; }
+.payment-section h3 { margin:0 0 8px 0; font-size:18px; }
+.payment-section label { font-size:14px; color:#333; }
+
+/* Feedback styles */
+.feedback-section { background:#fff; border:1px solid #eee; padding:12px; margin-top:18px; border-radius:6px; }
+.feedback-section h3 { margin:0 0 8px 0; font-size:18px; }
+.feedback-section input[type="text"], .feedback-section input[type="email"], .feedback-section select, .feedback-section textarea {
+    width:100%; box-sizing:border-box; padding:8px; margin:6px 0; border:1px solid #ddd; border-radius:4px; font-family:inherit;
+}
+.feedback-section textarea { min-height:80px; resize:vertical; }
+.fb-item { border-top:1px dashed #eee; padding:8px 0; }
+.fb-item p { margin:6px 0 0 0; }
+
+/* Toast */
+.toast { position:fixed; right:20px; bottom:20px; background:rgba(0,0,0,0.85); color:#fff; padding:10px 14px; border-radius:6px; font-size:14px; opacity:0; transform:translateY(8px); transition:all .25s ease; display:inline-block; z-index:9999; }
+.toast.show { opacity:1; transform:translateY(0); }
+.toast.success { background:linear-gradient(90deg,#2ecc71,#27ae60); }
+.toast.warning { background:linear-gradient(90deg,#f39c12,#d35400); }
